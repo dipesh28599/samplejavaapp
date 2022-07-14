@@ -4,14 +4,14 @@ pipeline {
         stage('compile') {
 			steps {
                 echo 'compiling..'
-				git url: 'https://github.com/dipesh28599/samplejavaapp/'
-				bat label: '', script: 'mvn compile'
+				git url: 'https://github.com/dipesh28599/samplejavaapp'
+				sh script:'/opt/maven/bin/mvn  compile'
             }
         }
         stage('codereview-pmd') {
 			steps {
                 echo 'codereview..'
-				bat label: '', script: 'mvn -P metrics pmd:pmd'
+				sh script:'/opt/maven/bin/mvn  -P metrics pmd:pmd'
             }
 			post {
                 success {
@@ -22,8 +22,8 @@ pipeline {
         }
         stage('unit-test') {
 			steps {
-                echo 'codereview..'
-				bat label: '', script: 'mvn test'
+                echo 'unittest..'
+				sh script:'/opt/maven/bin/mvn  test'
             }
 			post {
                 success {
@@ -32,10 +32,10 @@ pipeline {
             }
 			
         }
-        stage('metric-check') {
+        stage('codecoverage') {
 			steps {
-                echo 'unit test..'
-				bat label: '', script: 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
+                echo 'codecoverage..'
+				sh script:'/opt/maven/bin/mvn cobertura:cobertura -Dcobertura.report.format=xml'
             }
 			post {
                 success {
@@ -46,8 +46,8 @@ pipeline {
         }
         stage('package') {
 			steps {
-                echo 'metric-check..'
-				bat label: '', script: 'mvn package'	
+                echo 'package'
+				sh script:'/opt/maven/bin/mvn package'	
             }
 			
         }
